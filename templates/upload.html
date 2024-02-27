@@ -1,0 +1,43 @@
+{% extends "includes/nav_footer.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static "css/upload.css" %}">
+{% endblock styles %}
+
+{% block title %}
+<title>Text File Upload Page</title>
+{% endblock title %}
+
+{% block content %}
+<div class="upload-form">
+    <h2>Upload Text Files</h2>
+    <form action="/upload/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label" for="file">Choose text files</label>
+            <input class="form-control" type="file" id="file" name="files" accept=".txt" multiple required
+                onchange="displayFileNames()">
+        </div>
+        <div id="file-names"></div>
+        <button type="submit">Upload</button>
+    </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    function displayFileNames() {
+        const fileInput = document.getElementById('file');
+        const fileNamesContainer = document.getElementById('file-names');
+
+        fileNamesContainer.innerHTML = '';
+
+        for (const file of fileInput.files) {
+            const fileNameDiv = document.createElement('div');
+            fileNameDiv.textContent = file.name;
+            fileNamesContainer.appendChild(fileNameDiv);
+        }
+    }
+</script>
+{% endblock scripts %}

@@ -1,0 +1,33 @@
+{% extends "includes/nav_footer.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static "css/home.css" %}">
+{% endblock styles %}
+
+{% block title %}
+<title>Offline Encyclopedia | Home</title>
+{% endblock title %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-info">
+        <h1>Offline Encyclopedia</h1>
+        <hr>
+        <p>It is an AI powered applicaiton which enables us to upload texts data and analyze it in question answer style. It splits the texts into smaller
+            chunks and passes through an embedidng model and stores the generated embedding into vector database. It offers to ran query on the uploaded text data.
+            The query text is converted into an embedding and vecotr database compares the query embedding to stored embeddings and calculates distance. The lower 
+            distance indicates the most probable anser.
+        </p>
+    </div>
+    <div class="options-container dropdown">
+        <a class="option" href="{% url "upload" %}">
+            <div>
+                <h3>Upload Your Texts</h3>
+                <hr>
+                <p>Your text will be stored and <br> you will be able to run query on the data.</p>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock content %}
