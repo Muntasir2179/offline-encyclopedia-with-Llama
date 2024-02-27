@@ -6,5 +6,6 @@ urlpatterns = [
     path('login/', view=views.login_function, name='login'),
     path('signup/', view=views.signup_function, name='signup'),
     path('logout/', view=views.logout_function, name='logout'),
-    path('upload/', view=views.upload, name='upload')
+    path('upload/', view=views.upload, name='upload'),
+    path('upload/chat', view=views.chat, name='chat')
 ]

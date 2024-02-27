@@ -1,0 +1,138 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: rgb(51, 61, 78);
+    background-size: cover;
+}
+
+nav {
+    width: 100%;
+}
+
+a {
+    font-weight: bold;
+}
+
+.navbar .container-fluid a {
+    font-size: 25px;
+    padding-left: 20px;
+}
+
+.navbar .container-fluid .navbar-collapse a {
+    font-weight: normal;
+    font-size: 20px;
+}
+
+.navbar .container-fluid .navbar-collapse .nav-item span {
+    font-size: 18px;
+    margin: 8px 10px 0px 10px;
+}
+
+.upload-form {
+    width: 60%;
+    text-align: center;
+    margin-top: 50px;
+    color: white;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.upload-form h2 {
+    font-size: 40px;
+    padding-bottom: 30px;
+}
+
+form {
+    color: #555;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(90, 107, 117);
+    border-radius: 10px;
+}
+
+.file-input-container {
+    position: relative;
+}
+
+.file-input-container input {
+    font-size: 15px;
+    padding: 15px 15px;
+}
+
+.file-input-container textarea {
+    color: #555;
+    background-color: #c6e4e6;
+    font-size: 15px;
+    padding: 15px 15px;
+    resize: none;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    font-size: 18px;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+.response-container {
+    margin-top: 40px;
+    margin-bottom: 200px;
+}
+
+.result-container {
+    font-size: 20px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #000;
+    width: 100%;
+    display: none;
+    padding: 20px 20px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+}
+
+.result-container.show-box {
+    display: block;
+}
+
+.query-result h2 {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    padding: 0;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    font-size: 40px;
+}
+
+footer {
+    position: fixed;
+    width: 100%;
+    right: 0;
+    bottom: 0;
+}

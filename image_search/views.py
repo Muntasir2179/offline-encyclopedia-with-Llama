@@ -7,6 +7,11 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 import os
 from dashboard.settings import BASE_DIR
+from .text_processor import get_document_chunks
+from .chromadb_operations import ChromadbOperations
+
+
+vector_operations = ChromadbOperations()
 
 
 def login_function(request):
@@ -28,6 +33,7 @@ def login_function(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 loginUser(request, user)
+                vector_operations.create_vector_storage()
                 return redirect('index')
         else:
             username = request.POST.get('username')
@@ -77,19 +83,20 @@ def signup_function(request):
 
 
 def logout_function(request):
+    vector_operations.delete_vector_storage()
     logout(request=request)
     return redirect('login')
 
 
 @login_required(login_url='login')
 def index(request):
-    return render(request=request, template_name='home.html')
+    return render(request=request, template_name='home.html', context={'current_user': request.user})
 
 
 @login_required(login_url='login')
 def upload(request):
     if request.method == "GET":
-        return render(request=request, template_name='upload.html')
+        return render(request=request, template_name='upload.html', context={'current_user': request.user})
     else:
         os.makedirs(name=str(BASE_DIR / "uploads"), exist_ok=True)
         uploaded_files = request.FILES.getlist('files')
@@ -101,7 +108,29 @@ def upload(request):
                         destination.write(chunk)
                 destination.close()
         
-        return redirect('index')
+        if len(os.listdir(path=BASE_DIR / "uploads")) != 0:
+            text_chunks = get_document_chunks()
+            vector_operations.insert_data(texts_chunks=text_chunks)
+
+            # listing all the files in 'uploads' folder and deleting those uploaded files
+            file_list = os.listdir(BASE_DIR / 'uploads')
+            if len(file_list) != 0:
+                for file_name in file_list:
+                    os.remove(os.path.join(BASE_DIR / 'uploads', file_name))
+        
+        return render(request=request, template_name='chat.html', context={'current_user': request.user})
+
+
+@login_required(login_url='login')
+def chat(request):
+    context = {
+        'current_user': request.user
+    }
+    if request.method == 'POST':
+        query_text = request.POST.get('query')  # fetching the query
+        query_response = vector_operations.query(query_text=query_text)  # performing vector search 
+        context['query_response'] = query_response if query_response is not None else "No response"
+    return render(request=request, template_name='chat.html', context=context)
 
 
 def check_user_credentials(user_info):

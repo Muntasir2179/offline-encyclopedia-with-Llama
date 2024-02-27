@@ -1,0 +1,58 @@
+{% extends "includes/nav_footer.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static "css/chat.css" %}">
+{% endblock styles %}
+
+{% block title %}
+<title>Query Page</title>
+{% endblock title %}
+
+{% block content %}
+<div class="upload-form">
+    <h2>Submit Your Query Text</h2>
+    <form action="{% url "chat" %}" method="POST">
+        {% csrf_token %}
+        <div class="file-input-container">
+            <textarea class="form-control" name="query" id="query" cols="35" rows="3"
+                placeholder="Any prompt related to your uploaded texts..." required></textarea>
+        </div>
+        <input class="button" type="submit" value="Submit Query">
+        {% comment %} <button type="submit" class="btn btn-dark">Submit Query</button> {% endcomment %}
+    </form>
+
+    {% if query_response %}
+    <div class="response-container">
+        <div class="query-result" id="query-result">
+            <h2>Response to the Query</h2>
+        </div>
+        {% for response in query_response %}
+            <div class="result-container show-box" id="result-container">
+                <p>{{response}}</p>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% comment %} {% block scripts %}
+<script>
+    document.querySelector('.upload-form form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const queryInput = document.getElementById('query');
+        // var response = "{{query_response}}";
+        const resultContainer = document.getElementById('result-container');
+        const queryResult = document.getElementById('query-result');
+
+        if (queryInput.value.trim() !== '') {
+            queryResult.innerHTML = `<h2>Response to the Query</h2>`;
+            resultContainer.innerHTML = `<p>${queryInput.value}</p>`;
+            queryInput.value = '';
+            resultContainer.style.display = 'block';
+        }
+    });
+</script>
+{% endblock scripts %} {% endcomment %}

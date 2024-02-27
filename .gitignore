@@ -4,10 +4,11 @@
 uploads
 
 # database
+database
 db.sqlite3
 
 # environment
-.venv
+venv
 
 # files
 admin_account.txt
