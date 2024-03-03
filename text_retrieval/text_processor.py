@@ -6,7 +6,7 @@ from dashboard.settings import BASE_DIR
 def get_document_chunks():
     text_splitter = RecursiveCharacterTextSplitter(
         separators=["\n",],
-        chunk_size=300,
+        chunk_size=1000,
         chunk_overlap=90,
         length_function=len
     )

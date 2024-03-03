@@ -9,6 +9,7 @@ import os
 from dashboard.settings import BASE_DIR
 from .text_processor import get_document_chunks
 from .chromadb_operations import ChromadbOperations
+from llama_response import response
 
 
 vector_operations = ChromadbOperations()
@@ -128,7 +129,8 @@ def chat(request):
     }
     if request.method == 'POST':
         query_text = request.POST.get('query')  # fetching the query
-        query_response = vector_operations.query(query_text=query_text)  # performing vector search 
+        knowledge_base = vector_operations.query(query_text=query_text)  # performing vector search
+        query_response = response(context=knowledge_base, question=query_text)
         context['query_response'] = query_response if query_response is not None else "No response"
     return render(request=request, template_name='chat.html', context=context)
 

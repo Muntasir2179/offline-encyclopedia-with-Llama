@@ -2,6 +2,8 @@
 */__pycache__/*
 */migrations/*
 uploads
+llama
+__pycache__
 
 # database
 database

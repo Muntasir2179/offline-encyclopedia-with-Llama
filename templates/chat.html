@@ -27,32 +27,10 @@
         <div class="query-result" id="query-result">
             <h2>Response to the Query</h2>
         </div>
-        {% for response in query_response %}
-            <div class="result-container show-box" id="result-container">
-                <p>{{response}}</p>
-            </div>
-        {% endfor %}
+        <div class="result-container show-box" id="result-container">
+            <p>{{query_response}}</p>
+        </div>
     </div>
     {% endif %}
 </div>
 {% endblock content %}
-
-{% comment %} {% block scripts %}
-<script>
-    document.querySelector('.upload-form form').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const queryInput = document.getElementById('query');
-        // var response = "{{query_response}}";
-        const resultContainer = document.getElementById('result-container');
-        const queryResult = document.getElementById('query-result');
-
-        if (queryInput.value.trim() !== '') {
-            queryResult.innerHTML = `<h2>Response to the Query</h2>`;
-            resultContainer.innerHTML = `<p>${queryInput.value}</p>`;
-            queryInput.value = '';
-            resultContainer.style.display = 'block';
-        }
-    });
-</script>
-{% endblock scripts %} {% endcomment %}

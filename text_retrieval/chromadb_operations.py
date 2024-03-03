@@ -22,7 +22,7 @@ class ChromadbOperations:
     
     
     def query(self, query_text):
-        response = self.collection.query(query_texts=[query_text], n_results=2)
+        response = self.collection.query(query_texts=[query_text], n_results=1)
         return response['documents'][0]
     
     def delete_vector_storage(self):
