@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ImageSearchConfig(AppConfig):
+class TextRetrievalConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'image_search'
+    name = 'text_retrieval'
