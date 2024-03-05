@@ -16,7 +16,7 @@
         {% csrf_token %}
         <div class="mb-3">
             <label class="form-label" for="file">Choose text files</label>
-            <input class="form-control" type="file" id="file" name="files" accept=".txt" multiple required
+            <input class="form-control" type="file" id="file" name="files" accept=".txt,.pdf" multiple required
                 onchange="displayFileNames()">
         </div>
         <div id="file-names"></div>

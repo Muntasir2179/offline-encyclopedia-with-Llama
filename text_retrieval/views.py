@@ -102,12 +102,10 @@ def upload(request):
         os.makedirs(name=str(BASE_DIR / "uploads"), exist_ok=True)
         uploaded_files = request.FILES.getlist('files')
         for uploaded_file in uploaded_files:
-            if uploaded_file.content_type == 'text/plain':  # Check if the file is a text file
-                # Save the file to the 'uploads/' folder
-                with open(f'uploads/{uploaded_file.name}', 'wb') as destination:
-                    for chunk in uploaded_file.chunks():
-                        destination.write(chunk)
-                destination.close()
+            with open(f'uploads/{uploaded_file.name}', 'wb') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+            destination.close()
         
         if len(os.listdir(path=BASE_DIR / "uploads")) != 0:
             text_chunks = get_document_chunks()

@@ -1,6 +1,7 @@
-from langchain_community.document_loaders import DirectoryLoader
+from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from dashboard.settings import BASE_DIR
+import os
 
 
 def get_document_chunks():
@@ -11,10 +12,30 @@ def get_document_chunks():
         length_function=len
     )
 
-    # loading all documents at once
-    loader = DirectoryLoader(path=str(BASE_DIR / "uploads"), glob="**/*.txt")
-    documents = loader.load()
+    pdf_files = []
+    text_files = []
 
-    chunks = [chunk.page_content for chunk in text_splitter.split_documents(documents=documents)]
+    for file_name in os.listdir(path=str(BASE_DIR / "uploads")):
+        if file_name.split('.')[1] == 'txt':
+            text_files.append(file_name)
+        else:
+            pdf_files.append(file_name)
 
-    return chunks
+    all_chunks = []
+
+    # loading all pdf documents at once
+    if len(pdf_files) != 0:
+        pdf_loader = DirectoryLoader(path=str(BASE_DIR / "uploads"), glob="**/*.pdf")
+        pdf_documents = pdf_loader.load()
+
+        for single_chunk in  text_splitter.split_documents(documents=pdf_documents):
+            all_chunks.append(str(single_chunk))
+
+    # loading all text files at once
+    if len(text_files) != 0:
+        text_loader = DirectoryLoader(path=str(BASE_DIR / "uploads"), glob="**/*.txt")
+        text_documents = text_loader.load()
+        for text_chunk in text_splitter.split_documents(documents=text_documents):
+            all_chunks.append(str(text_chunk))
+
+    return all_chunks
