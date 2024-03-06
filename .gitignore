@@ -6,7 +6,6 @@ llama
 __pycache__
 
 # database
-database
 db.sqlite3
 
 # environment

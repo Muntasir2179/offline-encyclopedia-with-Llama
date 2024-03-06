@@ -4,16 +4,18 @@ from django.contrib.auth import authenticate, login as loginUser, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+# importing custom classes and helper functions
 import os
 from dashboard.settings import BASE_DIR
 from .text_processor import get_document_chunks
 from .chromadb_operations import ChromadbOperations
-from llama_response import response
+from .llama_response import response
 
 
+# creating object for performing vector operations
 vector_operations = ChromadbOperations()
 
+# Create your views here.
 
 def login_function(request):
     if request.method == 'GET':
@@ -26,6 +28,7 @@ def login_function(request):
         }
         return render(request=request, template_name='login.html', context=context)
     else:
+        # if user send a POST request with credentials
         error_message = None
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -62,6 +65,7 @@ def signup_function(request):
         }
         return render(request=request, template_name='signup.html', context=context)
     
+    # if user send a POST request with credentials
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         # forming error messages
@@ -84,6 +88,7 @@ def signup_function(request):
 
 
 def logout_function(request):
+    # deleting vector stores before logged out
     vector_operations.delete_vector_storage()
     logout(request=request)
     return redirect('login')
@@ -96,20 +101,23 @@ def index(request):
 
 @login_required(login_url='login')
 def upload(request):
-    if request.method == "GET":
+    if request.method == "GET":  # if user requests for upload page
         return render(request=request, template_name='upload.html', context={'current_user': request.user})
     else:
-        os.makedirs(name=str(BASE_DIR / "uploads"), exist_ok=True)
-        uploaded_files = request.FILES.getlist('files')
+        # if user send a POST request with uploaded files
+        os.makedirs(name=str(BASE_DIR / "uploads"), exist_ok=True)  # making 'uploads' directory if not exists
+        uploaded_files = request.FILES.getlist('files')   # fetching the uploaded files
+        # saving each file into the 'uploads' directory
         for uploaded_file in uploaded_files:
             with open(f'uploads/{uploaded_file.name}', 'wb') as destination:
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
             destination.close()
         
+        # if some files are there in 'uploads' directory then insert them into vector database
         if len(os.listdir(path=BASE_DIR / "uploads")) != 0:
-            text_chunks = get_document_chunks()
-            vector_operations.insert_data(texts_chunks=text_chunks)
+            text_chunks = get_document_chunks()   # splitting documents into smaller chunks
+            vector_operations.insert_data(texts_chunks=text_chunks)   # inserting into vector database
 
             # listing all the files in 'uploads' folder and deleting those uploaded files
             file_list = os.listdir(BASE_DIR / 'uploads')
@@ -125,14 +133,17 @@ def chat(request):
     context = {
         'current_user': request.user
     }
+    
+    # if user has send a POST request with a query
     if request.method == 'POST':
         query_text = request.POST.get('query')  # fetching the query
-        knowledge_base = vector_operations.query(query_text=query_text)  # performing vector search
-        query_response = response(context=knowledge_base, question=query_text)
-        context['query_response'] = query_response if query_response is not None else "No response"
+        knowledge_base = vector_operations.query(query_text=query_text)  # performing vector search to find context or knowledge base for Llama
+        query_response = response(context=knowledge_base, question=query_text)   # invoking the query and knowledge base into Llama
+        context['query_response'] = query_response if query_response is not None else "No response"  # fetching the Llama response
     return render(request=request, template_name='chat.html', context=context)
 
 
+# function for checking user credentials and generate valid error message
 def check_user_credentials(user_info):
     username = user_info['username']
     password1 = user_info['password1']
