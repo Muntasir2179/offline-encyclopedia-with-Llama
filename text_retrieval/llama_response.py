@@ -14,18 +14,13 @@ def clean_text(input_text):
 
 
 def response(context, question):
-    formatted_prompt = f"""
-    <<SYS>>
-    Your task is to analyze the texts in the 'Context' and generate answer for the question in 'Question'.\n
-    If you do not know the answer simply say you do not know.\n
+    prompt = f'''
+    Given the following information answer the following question only once:
 
-    Context:{context}\n
-    <</SYS>>
-    [INST]
-    Question:{question}\n
-    [/INST]\n
+    {context}
 
-    Assistant:
-    """
+    Question: {question}
+    '''
+    formatted_prompt =  f"<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n"
 
     return clean_text(model(formatted_prompt, max_new_tokens=500).generations[0].text)
