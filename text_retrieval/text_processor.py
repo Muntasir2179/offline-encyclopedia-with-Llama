@@ -4,7 +4,7 @@ from dashboard.settings import BASE_DIR
 import os
 
 
-def get_document_chunks():
+def get_document_chunks(path):
     text_splitter = RecursiveCharacterTextSplitter(
         separators=["\n",],
         chunk_size=1000,
@@ -15,7 +15,7 @@ def get_document_chunks():
     pdf_files = []
     text_files = []
 
-    for file_name in os.listdir(path=str(BASE_DIR / "uploads")):
+    for file_name in os.listdir(path=str(path)):
         if file_name.split('.')[1] == 'txt':
             text_files.append(file_name)
         else:
@@ -25,7 +25,7 @@ def get_document_chunks():
 
     # loading all pdf documents at once
     if len(pdf_files) != 0:
-        pdf_loader = DirectoryLoader(path=str(BASE_DIR / "uploads"), glob="**/*.pdf")
+        pdf_loader = DirectoryLoader(path=str(path), glob="**/*.pdf")
         pdf_documents = pdf_loader.load()
 
         for single_chunk in  text_splitter.split_documents(documents=pdf_documents):

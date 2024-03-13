@@ -116,7 +116,7 @@ def upload(request):
         
         # if some files are there in 'uploads' directory then insert them into vector database
         if len(os.listdir(path=BASE_DIR / "uploads")) != 0:
-            text_chunks = get_document_chunks()   # splitting documents into smaller chunks
+            text_chunks = get_document_chunks(path=BASE_DIR / "uploads")   # splitting documents into smaller chunks
             vector_operations.insert_data(texts_chunks=text_chunks)   # inserting into vector database
 
             # listing all the files in 'uploads' folder and deleting those uploaded files
@@ -151,7 +151,10 @@ def chat_with_custom_knowledge(request):
     }
     if request.method == "POST":
         query_text = request.POST.get('response_query')
-        context['query_response'] = "This is the response from the custom knowledge base."
+        # performing vector search to find context or knowledge base for Llama
+        custom_knowledge_base = vector_operations.query_on_custom_knowledge_base(query_text=query_text)
+        query_response = response(context=custom_knowledge_base, question=query_text)  # invoking the query and custom knowledge base context into Llama
+        context['query_response'] = query_response if query_response is not None else "No response" 
         context['query_text'] = query_text
     return render(request=request, template_name='chat.html', context=context)
 
