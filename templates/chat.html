@@ -12,25 +12,36 @@
 {% block content %}
 <div class="upload-form">
     <h2>Submit Your Query Text</h2>
-    <form action="{% url "chat" %}" method="POST">
+    <form action="{% url "chat" %}" method="POST" class="query-submit-form">
         {% csrf_token %}
         <div class="file-input-container">
             <textarea class="form-control" name="query" id="query" cols="35" rows="3"
                 placeholder="Any prompt related to your uploaded texts..." required></textarea>
         </div>
         <input class="button" type="submit" value="Submit Query">
-        {% comment %} <button type="submit" class="btn btn-dark">Submit Query</button> {% endcomment %}
     </form>
-
-    {% if query_response %}
-    <div class="response-container">
-        <div class="query-result" id="query-result">
-            <h2>Response to the Query</h2>
-        </div>
-        <div class="result-container show-box" id="result-container">
-            <p>{{query_response}}</p>
-        </div>
-    </div>
-    {% endif %}
 </div>
+
+{% if query_response %}
+<div class="response-form">
+    <div class="query-result" id="query-result">
+        <h2>Response to the Query</h2>
+    </div>
+    <form action="{% url "custom_knowledge" %}" method="POST" class="query-response-form">
+        {% csrf_token %}
+        <div class="response-container">
+            {% if query_text %}
+            <div class="result-container show-box" id="result-container">
+                <p>{{query_text}}</p>
+            </div>
+            <input type="text" name="response_query" value="{{query_text}}" hidden>
+            {% endif %}
+            <div class="result-container show-box" id="result-container">
+                <p>{{query_response}}</p>
+            </div>
+        </div>
+        <input class="button" type="submit" value="Use Custom Knowledge">
+    </form>
+</div>
+{% endif %}
 {% endblock content %}

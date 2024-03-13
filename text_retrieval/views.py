@@ -140,6 +140,19 @@ def chat(request):
         knowledge_base = vector_operations.query(query_text=query_text)  # performing vector search to find context or knowledge base for Llama
         query_response = response(context=knowledge_base, question=query_text)   # invoking the query and knowledge base into Llama
         context['query_response'] = query_response if query_response is not None else "No response"  # fetching the Llama response
+        context['query_text'] = query_text
+    return render(request=request, template_name='chat.html', context=context)
+
+
+@login_required(login_url='login')
+def chat_with_custom_knowledge(request):
+    context = {
+        'current_user': request.user
+    }
+    if request.method == "POST":
+        query_text = request.POST.get('response_query')
+        context['query_response'] = "This is the response from the custom knowledge base."
+        context['query_text'] = query_text
     return render(request=request, template_name='chat.html', context=context)
 
 

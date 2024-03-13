@@ -4,6 +4,10 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: rgb(51, 61, 78);
     background-size: cover;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 nav {
@@ -44,7 +48,7 @@ a {
     padding-bottom: 30px;
 }
 
-form {
+.upload-form form {
     color: #555;
     width: 100%;
     margin: 0 auto;
@@ -52,6 +56,35 @@ form {
     background-color: rgba(90, 107, 117);
     border-radius: 10px;
 }
+
+/* response section */
+.response-form {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    width: 60%;
+    text-align: center;
+    margin-top: 50px;
+    color: white;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.response-form form {
+    color: #555;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(90, 107, 117);
+    border-radius: 10px;
+}
+
+.response-form h2 {
+    font-size: 40px;
+    padding-bottom: 30px;
+}
+
+/* response section end */
 
 .file-input-container {
     position: relative;
@@ -96,11 +129,6 @@ button:hover {
     background-color: #555;
 }
 
-.response-container {
-    margin-top: 40px;
-    margin-bottom: 200px;
-}
-
 .result-container {
     font-size: 20px;
     position: relative;
@@ -131,8 +159,10 @@ button:hover {
 }
 
 footer {
-    position: fixed;
     width: 100%;
+    margin-top: auto;
+    /* position: absolute;
     right: 0;
-    bottom: 0;
+    left: 0;
+    bottom: 0; */
 }
